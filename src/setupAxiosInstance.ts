@@ -18,11 +18,11 @@ const setupAxiosInstance = (config: AxiosInstanceConfig): AxiosInstance => {
   // Request interceptor
   if (requestInterceptor) {
     instance.interceptors.request.use(
-      (config) => requestInterceptor(config),
+      (config):any => requestInterceptor(config),
       (error) => Promise.reject(error)
     )
     axios.interceptors.request.use(
-      (config) => requestInterceptor(config),
+      (config):any => requestInterceptor(config),
       (error) => Promise.reject(error)
     )
   }
