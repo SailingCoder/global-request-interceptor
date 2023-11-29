@@ -1,6 +1,6 @@
 {
   "name": "global-request-interceptor",
-  "version": "1.0.3-beta.2",
+  "version": "1.0.3",
   "description": "global-request-interceptor",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
