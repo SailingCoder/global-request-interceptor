@@ -1,7 +1,8 @@
 import { setupFetchInterceptor } from './fetchInterceptor';
 import { setupAxiosInterceptor } from './axiosInterceptor';
+import { setupXhrInterceptor } from './xhrInterceptor';
 
-export { setupFetchInterceptor, setupAxiosInterceptor };
+export { setupFetchInterceptor, setupAxiosInterceptor, setupXhrInterceptor };
 
 export function setupGlobalRequestInterceptor({
   requestCallback,
