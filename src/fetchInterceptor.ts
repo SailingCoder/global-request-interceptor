@@ -2,7 +2,7 @@
 
 let originalFetch = window.fetch;
 
-export function setupFetchInterceptor(requestCallback:any, responseCallback:any, errorCallback:any) {
+export function setupFetchInterceptor(requestCallback?:any, responseCallback?:any, errorCallback?:any) {
   window.fetch = function(url, options) {
     try {
       if (requestCallback) {

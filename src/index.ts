@@ -11,8 +11,8 @@ export function setupGlobalRequestInterceptor({
   library = 'axios' // 默认使用 axios
 }: {
   requestCallback: (request: any) => void;
-  responseCallback: (response: any) => void;
-  errorCallback: (error: any) => void;
+  responseCallback?: (response: any) => void;
+  errorCallback?: (error: any) => void;
   library?: 'axios' | 'fetch';
 }) {
   if (library === 'fetch') {

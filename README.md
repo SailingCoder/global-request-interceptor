@@ -23,7 +23,6 @@ npm install global-request-interceptor
 #### Global Interception with Axios
 
 ```javascript
-import axios from 'axios';
 import { setupAxiosInterceptor } from 'global-request-interceptor';
 
 setupAxiosInterceptor({

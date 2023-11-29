@@ -1,7 +1,7 @@
 // axiosInterceptor.js
 import axios from 'axios';
 
-export function setupAxiosInterceptor(requestCallback:any, responseCallback:any, errorCallback:any) {
+export function setupAxiosInterceptor(requestCallback?:any, responseCallback?:any, errorCallback?:any) {
   axios.interceptors.request.use(
     config => {
       if (requestCallback) {
