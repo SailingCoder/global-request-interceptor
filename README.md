@@ -1,52 +1,52 @@
 # Global Request Interceptor
 
-`global-request-interceptor` is a simple and flexible JavaScript library designed for intercepting network requests globally. This library supports both Axios and Fetch, the two major network request methods, allowing you to easily add global processing logic, log requests and responses, handle errors, and enhance the maintainability and flexibility of your application.
+[简体中文](./doc/README_ZH.md)  <!-- 添加跳转链接 -->
+
+`global-request-interceptor` is a simple yet flexible JavaScript library designed for intercepting network requests globally. This library supports Axios, Fetch, and XMLHttpRequest (XHR), allowing you to easily add global processing logic, log requests and responses, handle errors, and enhance the maintainability and flexibility of your application.
 
 ### Features
 
--   **Support for Axios and Fetch:** Provides interceptors for both Axios and Fetch, allowing you to choose to use one or both simultaneously.
--   **Global Interceptors:** Set up request, response, and error interceptors that will be effective across all requests in the entire application.
--   **Flexible Configuration:** Utilize callback functions within interceptors to execute custom logic, such as modifying request configurations, logging, error handling, etc.
+-   **Support for Axios, Fetch, and XHR:** Provides interceptors for Axios, Fetch, and XHR, giving you the option to use one, two, or all three simultaneously.
+-   **Global Interceptors:** Set up request, response, and error interceptors that will take effect across all requests in your entire application.
+-   **Flexible Configuration:** Through callback functions, you can execute custom logic within interceptors, such as modifying request configurations, logging, error handling, and more.
 
-## Installation
+### Installation
+
+Install using npm:
 
 ```bash
 npm install global-request-interceptor
 ```
 
-## Usage
+### Usage
 
-### 1. Using Axios
+#### Global Interception with Axios
 
 ```javascript
+import axios from 'axios';
 import { setupAxiosInterceptor } from 'global-request-interceptor';
 
-// 调用 setupAxiosInterceptor 设置拦截器
-setupAxiosInterceptor(
-  // 请求拦截器回调
-  config => {
+setupAxiosInterceptor({
+  requestCallback: config => {
     console.log('Intercepted Axios request:', config);
-    // 在这里可以修改请求配置
+    // Customize request configuration here
+    // e.g., config.url += '?token=123456789'; config.url = 'https://****.com/' + config.url;
     return config;
   },
-  // 响应拦截器回调
-  response => {
+  responseCallback: response => {
     console.log('Intercepted Axios response:', response);
-    // 在这里可以修改响应数据
+    // Customize response data here
     return response;
   },
-  // 错误拦截器回调
-  error => {
+  errorCallback: error => {
     console.error('Intercepted Axios error:', error);
-    // 在这里可以处理请求或响应发生的错误
+    // Handle errors that occur during request or response
     return Promise.reject(error);
   }
-);
-
-// Continue with your application logic
+});
 ```
 
-你可以继续使用 Axios 发送请求，拦截器将在请求过程中执行。
+You can continue using Axios to send requests, and the interceptors will execute during the request process.
 
 ```javascript
 axios.get('https://api.example.com/data')
@@ -58,36 +58,34 @@ axios.get('https://api.example.com/data')
   });
 ```
 
-### 2. Using Fetch
+#### Global Interception with Fetch
 
 ```javascript
 import { setupFetchInterceptor } from 'global-request-interceptor';
 
-// 调用 setupFetchInterceptor 设置拦截器
 setupFetchInterceptor(
-  // 请求拦截器回调
+  // Request interceptor callback
   (url, options) => {
     console.log('Intercepted fetch request:', url, options);
-    // 在这里可以修改请求配置
+    // Customize request configuration here
+    // e.g., url += '?token=123456789'; url = 'https://****.com/' + url;
   },
-  // 响应拦截器回调
+  // Response interceptor callback
   response => {
     console.log('Intercepted fetch response:', response);
-    // 在这里可以修改响应数据
+    // Customize response data here
     return response;
   },
-  // 错误拦截器回调
+  // Error interceptor callback
   error => {
     console.error('Intercepted fetch error:', error);
-    // 在这里可以处理请求或响应发生的错误
+    // Handle errors that occur during request or response
     throw error;
   }
 );
-
-// Continue with your application logic
 ```
 
-之后，你可以继续使用 Fetch 发送请求，拦截器将在请求过程中执行。
+Afterwards, you can continue using Fetch to send requests, and the interceptors will execute during the request process.
 
 ```javascript
 fetch('https://api.example.com/data')
@@ -98,9 +96,34 @@ fetch('https://api.example.com/data')
   .catch(error => {
     console.error('Fetch error:', error);
   });
-
 ```
 
-## 许可证
+#### Global Interception with XHR
 
-本项目基于 MIT 许可证。有关更多信息，请参阅 LICENSE 文件。
+```javascript
+import { setupXhrInterceptor } from 'global-request-interceptor';
+
+setupXhrInterceptor(
+  // Request interceptor callback
+  info => {
+    console.log('Intercepted XHR request:', info);
+    // Customize request configuration here
+    // e.g., info.url += '?token=123456789'; info.url = 'https://****.com/' + info.url;
+  },
+  // Response interceptor callback
+  info => {
+    console.log('Intercepted XHR response:', info);
+    // Customize response data here
+  },
+  // Error interceptor callback
+  error => {
+    console.error('Intercepted XHR error:', error);
+    // Handle errors that occur during request or response
+    throw error;
+  }
+);
+```
+
+## License
+
+This project is licensed under the MIT License. For more information, please see the LICENSE file.
