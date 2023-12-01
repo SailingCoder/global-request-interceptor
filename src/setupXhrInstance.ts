@@ -84,3 +84,25 @@ export default setupXhrInstance
 //   .catch((xhr) => {
 //     console.error('Request failed:', xhr)
 //   })
+
+// import { setupXhrInterceptor } from 'global-request-interceptor';
+
+// setupXhrInterceptor(
+//   // Request interceptor callback
+//   info => {
+//     console.log('Intercepted XHR request:', info);
+//     // Customize request configuration here
+//     // e.g., info.url += '?token=123456789'; info.url = 'https://****.com/' + info.url;
+//   },
+//   // Response interceptor callback
+//   info => {
+//     console.log('Intercepted XHR response:', info);
+//     // Customize response data here
+//   },
+//   // Error interceptor callback
+//   error => {
+//     console.error('Intercepted XHR error:', error);
+//     // Handle errors that occur during request or response
+//     throw error;
+//   }
+// );

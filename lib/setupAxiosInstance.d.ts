@@ -1,10 +1,10 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 interface AxiosInstanceConfig {
-    axiosInstance?: AxiosInstance;
-    options?: AxiosRequestConfig;
-    requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig;
-    responseInterceptor?: (response: AxiosResponse) => AxiosResponse;
-    errorCallback?: (error: any) => void;
+    instances?: AxiosInstance | AxiosInstance[];
+    defaultOptions?: AxiosRequestConfig;
+    onRequest?: (config: AxiosRequestConfig) => AxiosRequestConfig;
+    onResponse?: (response: AxiosResponse) => AxiosResponse;
+    onError?: (error: any) => void;
 }
-declare const setupAxiosInstance: (config: AxiosInstanceConfig) => AxiosInstance;
+declare const setupAxiosInstance: (config?: AxiosInstanceConfig) => AxiosInstance | AxiosInstance[];
 export default setupAxiosInstance;

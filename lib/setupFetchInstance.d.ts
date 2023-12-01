@@ -1,9 +1,7 @@
-type FetchInstance = WindowOrWorkerGlobalScope['fetch'];
-interface FetchInstanceConfig {
-    fetchInstance?: FetchInstance;
-    requestInterceptor?: (url: RequestInfo, options?: RequestInit) => Promise<[RequestInfo, RequestInit]>;
-    responseInterceptor?: (response: Response) => Promise<Response>;
-    errorCallback?: (error: any) => void;
+interface FetchConfig {
+    onRequest?: (input: RequestInfo, init?: RequestInit) => RequestInit;
+    onResponse?: (response: Response) => Response;
+    onError?: (error: any) => void;
 }
-declare const setupFetchInstance: (config: FetchInstanceConfig) => FetchInstance;
+declare const setupFetchInstance: (config?: FetchConfig) => void;
 export default setupFetchInstance;
