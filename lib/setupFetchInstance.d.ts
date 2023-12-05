@@ -1,5 +1,5 @@
 interface FetchConfig {
-    onRequest?: (input: RequestInfo, init?: RequestInit) => RequestInit;
+    onRequest?: (config?: any) => RequestInit;
     onResponse?: (response: Response) => Response;
     onError?: (error: any) => void;
 }

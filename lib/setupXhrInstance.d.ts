@@ -1,7 +1,7 @@
 interface XhrInstanceConfig {
-    requestInterceptor?: (xhr: XMLHttpRequest) => void;
-    responseInterceptor?: (xhr: XMLHttpRequest) => void;
-    errorCallback?: (xhr: XMLHttpRequest) => void;
+    onRequest?: (xhr: XMLHttpRequest) => void;
+    onResponse?: (response: Response) => void;
+    onError?: (error: any) => void;
 }
-declare const setupXhrInstance: (config: XhrInstanceConfig) => (method: string, url: string, data: any) => Promise<unknown>;
+declare const setupXhrInstance: (config: XhrInstanceConfig) => (url: string, options?: any) => Promise<Response>;
 export default setupXhrInstance;

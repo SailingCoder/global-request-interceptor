@@ -1,8 +1,8 @@
 import setupFetchInstance from './setupFetchInstance'
 import setupAxiosInstance from './setupAxiosInstance'
-import setupXhrInstance from './setupXhrInstance'
+// import setupXhrInstance from './setupXhrInstance'
 
-export { setupFetchInstance, setupAxiosInstance, setupXhrInstance }
+export { setupFetchInstance, setupAxiosInstance }
 
 // export function setupGlobalRequestInterceptor({
 //   requestCallback,

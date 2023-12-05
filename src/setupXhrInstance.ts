@@ -11,9 +11,9 @@ const setupXhrInstance = (config: XhrInstanceConfig) => {
     onError
   } = config;
 
-  return async (url: string, options: RequestInit = {}): Promise<Response> => {
+  return async (url: string, options: any = {}): Promise<Response> => {
     // 创建 XMLHttpRequest 实例
-    const xhr = new XMLHttpRequest();
+    const xhr:any = new XMLHttpRequest();
 
     // 设置请求方法，默认为 GET
     const method = options.method || 'GET';
@@ -28,7 +28,7 @@ const setupXhrInstance = (config: XhrInstanceConfig) => {
     };
 
     // 处理请求体
-    const body = options.body;
+    const body:any = options.body;
     if (body) {
       xhr.send(body);
     } else {
