@@ -153,44 +153,29 @@ myAxios.post('https://api.example.com/data', data)
 ```javascript
 import { setupFetchInterceptor } from 'global-request-interceptor';
 
-setupFetchInterceptor(
+setupFetchInterceptor({
   // Request interceptor callback
-  onRequest: (url, options) => {
-    console.log('Intercepted fetch request:', url, options);
+  onRequest: async (config) => {
+    console.log('Intercepted fetch request:', config);
     // Customize request configuration here
-
-    // 1. Append URL parameters
-    // const url = new URL(url as string);
-    // url.searchParams.append('version', '123');
-
-    // 2. Add custom headers
-    // const headers = new Headers(init?.headers);
-    // headers.append('Sailing', 'abc');
-    // return {
-    //   ...init,
-    //   headers,
-    //   // Modify other request configurations here, such as method, body, etc.
-    //   // If asynchronous processing is needed, you can return a Promise<RequestInit> object
-    // };
-    return options;
+    // config.url += '?token=123456789'; 
+    // config.headers['Sailing'] = 'abc';
+    return config;
   },
   // Response interceptor callback
   onResponse: async (response) => {
     console.log('Intercepted fetch response:', response);
     // Customize response data here
-
     // const data = await response.json();
     // console.log('Parsed JSON data:', data);
-
     return response;
   },
   // Error interceptor callback
   onError: (error) => {
     console.error('Intercepted fetch error:', error);
-    // Handle errors that occur during request or response
     throw error;
   }
-);
+});
 ```
 
 Afterwards, you can continue using Fetch to send requests, and the interceptors will execute during the request process.

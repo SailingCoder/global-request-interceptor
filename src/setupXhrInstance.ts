@@ -1,108 +1,94 @@
-// xhr-instance.ts
 interface XhrInstanceConfig {
-  requestInterceptor?: (xhr: XMLHttpRequest) => void;
-  responseInterceptor?: (xhr: XMLHttpRequest) => void;
-  errorCallback?: (xhr: XMLHttpRequest) => void;
+  onRequest?: (xhr: XMLHttpRequest) => void;
+  onResponse?: (response: Response) => void;
+  onError?: (error: any) => void;
 }
 
 const setupXhrInstance = (config: XhrInstanceConfig) => {
   const {
-    requestInterceptor, // 请求拦截器
-    responseInterceptor, // 响应拦截器
-    errorCallback // Xhr 错误
-  } = config
+    onRequest,
+    onResponse,
+    onError
+  } = config;
 
-  const xhr = new XMLHttpRequest()
+  return async (url: string, options: RequestInit = {}): Promise<Response> => {
+    // 创建 XMLHttpRequest 实例
+    const xhr = new XMLHttpRequest();
 
-  const interceptedXhr = async (method: string, url: string, data: any) => {
+    // 设置请求方法，默认为 GET
+    const method = options.method || 'GET';
+
+    // 处理请求头
+    const setHeaders = (headers: Headers) => {
+      if (headers) {
+        for (const [header, value] of Object.entries(headers)) {
+          xhr.setRequestHeader(header, value.toString());
+        }
+      }
+    };
+
+    // 处理请求体
+    const body = options.body;
+    if (body) {
+      xhr.send(body);
+    } else {
+      xhr.send();
+    }
+
+    // 在请求前执行全局操作
+    if (onRequest) {
+      onRequest(xhr);
+    }
+
+    // 返回 Promise，以便链式调用
     return new Promise((resolve, reject) => {
-      // 配置请求
-      xhr.open(method, url, true)
+      xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE) {
+          if (this.status >= 200 && this.status < 300) {
+            const response = new Response(this.responseText, {
+              status: this.status,
+              statusText: this.statusText,
+              headers: this.getAllResponseHeaders()
+            });
 
-      // 请求拦截器
-      if (requestInterceptor) {
-        requestInterceptor(xhr)
-      }
+            // 在响应后执行全局操作
+            if (onResponse) {
+              onResponse(response);
+            }
 
-      // 设置响应处理函数
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          // 响应拦截器
-          if (responseInterceptor) {
-            responseInterceptor(xhr)
-          }
-
-          if (xhr.status >= 200 && xhr.status < 300) {
-            resolve(xhr)
+            resolve(response);
           } else {
-            reject(xhr)
+            const error = new Error('XHR request failed');
+            // 在错误时执行全局操作
+            if (onError) {
+              onError(error);
+            }
+            reject(error);
           }
         }
+      };
+
+      // 设置请求超时时间
+      if (options.timeout) {
+        xhr.timeout = options.timeout;
       }
 
-      // 错误处理函数
-      xhr.onerror = () => {
-        if (errorCallback) {
-          errorCallback(xhr)
-        }
-        reject(xhr)
+      // 设置是否异步
+      const async = options.async !== false;
+      xhr.open(method, url, async);
+
+      // 设置请求头
+      if (options.headers) {
+        setHeaders(options.headers);
       }
 
-      // 发送请求
-      xhr.send(data)
-    })
-  }
+      // 使用对象属性的方式设置请求头
+      if (options.headers) {
+        // 使用对象属性的方式设置请求头
+        xhr.headers = options.headers;
+      }
+    });
+  };
+};
 
-  return interceptedXhr
-}
-
-export default setupXhrInstance
-
-// import { setupXhrInstance } from 'global-request-interceptor'
-
-// 使用 setupXhrInstance 进行配置
-// const customXhr = setupXhrInstance({
-//   requestInterceptor: (xhr) => {
-//     console.log('Request interceptor:', xhr)
-//     // 可以在这里修改请求
-//   },
-//   responseInterceptor: (xhr) => {
-//     console.log('Response interceptor:', xhr)
-//     // 可以在这里修改响应
-//   },
-//   errorCallback: (xhr) => {
-//     console.error('Error occurred:', xhr)
-//     // 在这里添加自定义的异常处理逻辑
-//   }
-// })
-
-// // 使用 customXhr 进行请求
-// customXhr('GET', 'https://api.example.com/data', null)
-//   .then((xhr) => {
-//     console.log(xhr.responseText)
-//   })
-//   .catch((xhr) => {
-//     console.error('Request failed:', xhr)
-//   })
-
-// import { setupXhrInterceptor } from 'global-request-interceptor';
-
-// setupXhrInterceptor(
-//   // Request interceptor callback
-//   info => {
-//     console.log('Intercepted XHR request:', info);
-//     // Customize request configuration here
-//     // e.g., info.url += '?token=123456789'; info.url = 'https://****.com/' + info.url;
-//   },
-//   // Response interceptor callback
-//   info => {
-//     console.log('Intercepted XHR response:', info);
-//     // Customize response data here
-//   },
-//   // Error interceptor callback
-//   error => {
-//     console.error('Intercepted XHR error:', error);
-//     // Handle errors that occur during request or response
-//     throw error;
-//   }
-// );
+export default setupXhrInstance;

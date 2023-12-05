@@ -1,6 +1,6 @@
 // Configuration interface for fetch
 interface FetchConfig {
-  onRequest?: (input: RequestInfo, init?: RequestInit) => RequestInit;
+  onRequest?: (config?: any) => RequestInit;
   onResponse?: (response: Response) => Response;
   onError?: (error: any) => void;
 }
@@ -10,15 +10,21 @@ const setupFetchInstance = (config: FetchConfig = {}): void => {
 
   const originalFetch = fetch;
 
-  const fetchWithInterceptors = async (input: RequestInfo, init?: RequestInit): Promise<Response> => {
-    let requestConfig: RequestInit = init || {};
+  const fetchWithInterceptors = async (url: RequestInfo, options?: RequestInit): Promise<Response> => {
+    let requestConfig: RequestInit = options || {};
 
     if (onRequest) {
-      requestConfig = onRequest(input, requestConfig);
+      let { url: requestUrl, ...requestOptions } :any = await onRequest({
+        url: url,
+        ...requestConfig
+      });
+
+      url = requestUrl
+      requestConfig = { ...requestOptions }
     }
 
     try {
-      let response = await originalFetch(input, requestConfig);
+      let response = await originalFetch(url, requestConfig);
 
       if (onResponse) {
         response = onResponse(response);

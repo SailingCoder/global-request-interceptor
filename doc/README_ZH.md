@@ -154,44 +154,29 @@ myAxios.post('https://api.example.com/data', data)
 ```javascript
 import { setupFetchInterceptor } from 'global-request-interceptor';
 
-setupFetchInterceptor(
-  // Request interceptor callback
-  onRequest: (url, options) => {
-    console.log('Intercepted fetch request:', url, options);
-    // Customize request configuration here
-
-    // 1. 拼接地址参数
-    // const url = new URL(url as string);
-    // url.searchParams.append('version', '123');
-
-    // 2. 添加自定义头部
-    // const headers = new Headers(init?.headers);
-    // headers.append('Sailing', 'abc');
-    // return {
-    //   ...init,
-    //   headers,
-    //   // 在这里可以修改其他请求配置，比如 method、body 等
-    //   // 如果需要异步处理，可以返回一个 Promise<RequestInit> 对象
-    // };
-    return options;
+setupFetchInterceptor({
+  onRequest: async (config) => {
+    console.log('Intercepted fetch request:', config);
+    // 您的请求拦截器逻辑
+    // config.url += '?token=123456789'; 
+    // config.headers['Sailing'] = 'abc';
+    return config;
   },
   // Response interceptor callback
   onResponse: async (response) => {
     console.log('Intercepted fetch response:', response);
-    // Customize response data here
-
+    // 您的响应拦截器逻辑
     // const data = await response.json();
     // console.log('Parsed JSON data:', data);
-
     return response;
   },
   // Error interceptor callback
   onError: (error) => {
     console.error('Intercepted fetch error:', error);
-    // Handle errors that occur during request or response
+    // 您的错误处理逻辑
     throw error;
   }
-);
+});
 ```
 
 之后，您可以继续使用Fetch发送请求，拦截器将在请求过程中执行。
