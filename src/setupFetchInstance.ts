@@ -1,7 +1,7 @@
 // Configuration interface for fetch
 interface FetchConfig {
-  onRequest?: (config?: any) => RequestInit;
-  onResponse?: (response: Response) => Response;
+  onRequest?: (config?: any) => RequestInit | Promise<RequestInit>;
+  onResponse?: (response: Response) => Response | Promise<Response>;
   onError?: (error: any) => void;
 }
 
