@@ -24,7 +24,7 @@ const setupFetchInstance = (config: FetchConfig = {}): void => {
     }
 
     try {
-      let response = await originalFetch(url, requestConfig);
+      let response:any = await originalFetch(url, requestConfig);
 
       if (onResponse) {
         response = onResponse(response);
